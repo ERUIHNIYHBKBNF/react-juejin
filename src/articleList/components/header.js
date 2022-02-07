@@ -4,7 +4,11 @@ export default class Header extends React.Component {
   render() {
     return (
       <div className={style['header']}>
-        header
+        <ul>
+          <li>推荐</li>
+          <li>前端</li>
+          <li>后端</li>
+        </ul>
       </div>
     );
   }
