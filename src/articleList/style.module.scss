@@ -1,8 +1,24 @@
 .container {
-  height: 100px;
-  width: 100px;
-  background-color: aqua;
-  h1 {
-    color: red;
+  width: 100%;
+  @mixin navTabs {
+    position: fixed;
+    height: 5vh;
+    width: 100%;
+  }
+  .header {
+    @include navTabs;
+    top: 0;
+  }
+  .bottom {
+    @include navTabs;
+    bottom: 0;
+  }
+  .body {
+    margin: 5vh 0;
+    .block {
+      height: 500px;
+      width: 100%;
+      background-color: aqua;
+    }
   }
 }
