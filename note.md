@@ -83,6 +83,36 @@ export default class ArticleList extends React.Component {
 
 可以正常访问，然后开始撸页面就好了唔。
 
-顺带现在长这个样子：
+顺带现在长这个样子：<img src="https://cdn.jsdelivr.net/gh/ERUIHNIYHBKBNF/picapica@main/frontend/2022020703.webp" width="200px">
 
-![](https://cdn.jsdelivr.net/gh/ERUIHNIYHBKBNF/picapica@main/frontend/2022020703.webp)
+## 开始撸页面
+
+### 使用css
+
+[阮一峰-CSS Modules 用法教程](http://www.ruanyifeng.com/blog/2016/06/css_modules.html)
+
+> CSS的规则都是全局的，任何一个组件的样式规则，都对整个页面有效。
+>
+> 产生局部作用域的唯一方法，就是使用一个独一无二的`class`的名字，不会与其他选择器重名。这就是 CSS Modules 的做法。
+
+算了算了，反正也不急着弄明白啥意思（~~赶紧水完项目要紧~~）简单来说，局部样式和全局样式分别这样用：
+
+* 局部
+  * 命名：`style.module.css`
+  * 引入：`import style from 'style.module.css'`
+  * 使用： `<div className={style[className]}>`
+* 全局
+  * 命名：`style.css`
+  * 引入：`import 'style.css'`
+  * 使用：`<div className='className'>`
+
+顺带用一下scss，至少能嵌套一下就很方便qwq
+
+```bash
+npm install -d node-sass
+```
+
+
+
+
+
