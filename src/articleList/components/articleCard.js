@@ -1,10 +1,6 @@
 import React from "react";
 import style from "../style.module.scss";
 export default class ArticleCard extends React.Component {
-  constructor(props) {
-    super(props);
-    // id author title brief time
-  }
   formatTime(time) {
     const date = new Date(parseInt(time) * 1000), now = new Date();
     if (now.getMonth() - date.getMonth()) {

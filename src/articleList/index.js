@@ -24,7 +24,6 @@ export default class ArticleList extends React.Component {
   }
   componentDidMount() {
     this.fetchCategories();
-    this.fetchArticles();
   }
   // 获取分类
   async fetchCategories() {
@@ -60,7 +59,7 @@ export default class ArticleList extends React.Component {
       this.fetchHistoryArticles();
     } else {
       const categoryId = this.state.activeSubTab === -1 ? this.state.activeHeaderTab : this.state.activeSubTab;
-      const sortBy = this.state.activeBottomTab == 0 ? 'hot' : 'new';
+      const sortBy = this.state.activeBottomTab === 0 ? 'hot' : 'new';
       const offset = this.state.articleList.length;
       let response = await getArticles(categoryId, sortBy, offset);
       this.setState({
@@ -112,7 +111,8 @@ export default class ArticleList extends React.Component {
         }
         <Body
           articles={ this.state.articleList }
-          fetchArticles={ this.fetchArticles }
+          // fetchArticles={ this.fetchArticles }
+          father={ this }
         />
         <Bottom
           tabs={ this.state.bottomTabs }

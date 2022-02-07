@@ -1,10 +1,6 @@
 import React from "react";
 import style from "../style.module.scss";
 export default class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    // console.log(props);
-  }
   render() {
     return (
       <div className={ style['header'] }>

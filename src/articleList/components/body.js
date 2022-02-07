@@ -5,16 +5,32 @@ import { Link } from "react-router-dom";
 export default class Body extends React.Component {
   constructor(props) {
     super(props);
+    this.loading = React.createRef();
+    this.state = {
+      observer: null,
+    };
+  }
+  componentDidMount() {
+    const observer = new IntersectionObserver(
+      () => {
+        // 这算在玩火吗qwq？
+        this.props.father.fetchArticles();
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+    observer.observe(this.loading.current);
   }
   render() {
     return (
       <div className={style['body']}>
         <ul>
-          {this.props.articles.map((item) => (
+          {this.props.articles.map((item, index) => (
             <Link
               style={{ textDecoration:'none', color: '#000' }}
               to={ '/article/' + item.article_id }
-              key={ item.article_id }
+              key={ index }
             >
               <li><ArticleCard
                 title={ item.article_info.title }
@@ -25,7 +41,7 @@ export default class Body extends React.Component {
             </Link>
           ))}
         </ul>
-        <span className={style['loading']}>加载中...</span>
+        <span ref={this.loading} className={style['loading']}>加载中...</span>
       </div>
     );
   }

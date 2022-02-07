@@ -1,9 +1,6 @@
 import React from "react";
 import style from "../style.module.scss";
 export default class Bottom extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div className={ style['sub-header'] }>
