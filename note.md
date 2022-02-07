@@ -20,7 +20,7 @@ npm start
 
 **看文档之前一定先看好版本QAQ**
 
-最后参考了这篇文章：[React Router v6 使用指南](https://zhuanlan.zhihu.com/p/191419879)
+看上去还不错的一篇文章：[React Router v6 使用指南](https://zhuanlan.zhihu.com/p/191419879)
 
 抄一下官方的demo：[Basic Example](https://reactrouter.com/docs/en/v6/examples/basic)
 
@@ -111,8 +111,6 @@ export default class ArticleList extends React.Component {
 ```bash
 npm install -d node-sass
 ```
-
-
 
 
 
