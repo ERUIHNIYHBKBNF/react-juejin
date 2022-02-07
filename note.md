@@ -2,6 +2,8 @@
 
 有几次vue项目经历，尝试写个react小项目（~~比着跟官方教程写的tictactoe抄抄就行了~~），在此做点记录。
 
+来自[字学镜像计划](https://bytedancecampus1.feishu.cn/docs/doccn4ArhE7N3J3V2OszhGlZQkd#)，
+
 ## 初始化
 
 按官方文档来，创建一个新的单页应用。
@@ -112,5 +114,5 @@ export default class ArticleList extends React.Component {
 npm install -d node-sass
 ```
 
-
+### 组件关系
 
