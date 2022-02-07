@@ -3,7 +3,7 @@ import style from "../style.module.scss";
 export default class Bottom extends React.Component {
   render() {
     return (
-      <div className={style['bottom']}>
+      <div className={ style['bottom'] }>
         <ul>
           {this.props.tabs.map((item, index) => (
             <li
@@ -11,7 +11,7 @@ export default class Bottom extends React.Component {
               className={ this.props.activeTab === index ? style['active-tab'] : '' }
               key={ index }
             >
-              {item}
+              { item }
             </li>
           ))}
         </ul>

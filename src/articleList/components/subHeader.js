@@ -6,7 +6,7 @@ export default class Bottom extends React.Component {
   }
   render() {
     return (
-      <div className={style['sub-header']}>
+      <div className={ style['sub-header'] }>
         <ul>
           {this.props.tabs.map((item) => (
             <li
