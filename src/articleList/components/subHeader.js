@@ -8,13 +8,13 @@ export default class Bottom extends React.Component {
     return (
       <div className={style['sub-header']}>
         <ul>
-          {this.props.tabs.map((item, index) => (
+          {this.props.tabs.map((item) => (
             <li
-              onClick={ () => this.props.changeTab(index) }
-              className={ this.props.activeTab === index ? style['active-tab'] : '' }
-              key={ index }
+              onClick={ () => this.props.changeTab(item.id) }
+              className={ this.props.activeTab === item.id ? style['active-tab'] : '' }
+              key={ item.id }
             >
-              {item}
+              { item.name }
             </li>
           ))}
         </ul>
