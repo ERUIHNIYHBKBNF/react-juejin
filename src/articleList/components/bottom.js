@@ -5,9 +5,15 @@ export default class Bottom extends React.Component {
     return (
       <div className={style['bottom']}>
         <ul>
-          <li>热门</li>
-          <li>最新</li>
-          <li>历史</li>
+          {this.props.tabs.map((item, index) => (
+            <li
+              onClick={ () => this.props.changeTab(index) }
+              className={ this.props.activeTab === index ? style['active-tab'] : '' }
+              key={ index }
+            >
+              {item}
+            </li>
+          ))}
         </ul>
       </div>
     );

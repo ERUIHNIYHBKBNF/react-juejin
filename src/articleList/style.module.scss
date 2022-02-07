@@ -3,7 +3,6 @@
   background-color: #e9e9e9;
   // 导航栏样式
   @mixin navTabBar {
-    position: fixed;
     height: 5vh;
     width: 100%;
     display: flex;
@@ -23,6 +22,7 @@
   // 顶部导航栏
   .header {
     @include navTabBar;
+    position: sticky;
     top: 0;
     background-color: white;
     ul {
@@ -43,6 +43,7 @@
   // 顶部二级导航栏
   .sub-header {
     @include navTabBar;
+    position: sticky;
     top: 5vh;
     height: 5vh;
     background-color: #e9e9e9;
@@ -63,6 +64,7 @@
   // 底部导航栏
   .bottom {
     @include navTabBar;
+    position: fixed;
     bottom: 0;
     background-color: white;
     ul {
@@ -82,7 +84,7 @@
   }
   // 文章列表主体
   .body {
-    margin: 10vh 2vw;
+    margin: 1vh 2vw;
     background-color: #e9e9e9;
     ul {
       list-style: none;

@@ -1,13 +1,22 @@
 import React from "react";
 import style from "../style.module.scss";
 export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <div className={style['header']}>
         <ul>
-          <li>推荐</li>
-          <li>前端</li>
-          <li>后端</li>
+          {this.props.tabs.map((item, index) => (
+            <li
+              onClick={ () => this.props.changeTab(index) }
+              className={ this.props.activeTab === index ? style['active-tab'] : '' }
+              key={ index }
+            >
+              {item}
+            </li>
+          ))}
         </ul>
       </div>
     );
