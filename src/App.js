@@ -1,9 +1,11 @@
-function App() {
+import { Routes, Route } from 'react-router-dom';
+import ArticleList from './articleList';
+import Article from './article';
+export default function App() {
   return (
-    <div>
-      init
-    </div>
+    <Routes>
+      <Route path="/" element={<ArticleList />} />
+      <Route path="/article" element={<Article />} />
+    </Routes>
   );
 }
-
-export default App;
