@@ -22,10 +22,24 @@ export default class ArticleList extends React.Component {
       articleList: [],
       // 当前分类下总文章数
       totalArticles: 0,
+      // scrollTop: 0,
     };
+    // const lastState = sessionStorage.getItem('homeState');
+    // if (lastState) {
+    //   this.setState(JSON.parse(lastState));
+    //   // console.log(JSON.parse(lastState));
+    //   window.scrollTo(0, this.state.scrollTop);
+    // }
   }
   componentDidMount() {
     this.fetchCategories();
+  }
+  componentWillUnmount() {
+    // const state = this.state;
+    // state.scrollTop = window.scrollX;
+    // console.log();
+    // console.log(state);
+    // sessionStorage.setItem('homeState', JSON.stringify(state));
   }
   // 获取分类
   async fetchCategories() {
@@ -72,28 +86,43 @@ export default class ArticleList extends React.Component {
   }
   // 获取历史文章
   fetchHistoryArticles() {
-
+    const history = localStorage.getItem('historyArticles');
+    if (history) {
+      const historyArticles = JSON.parse(history);
+      this.setState({
+        articleList: historyArticles,
+        totalArticles: historyArticles.length,
+      });
+    } else {
+      this.setState({
+        articleList: [],
+        totalArticles: 0,
+      });
+    }
   }
-  changeHeaderTab = (id) => {
-    this.setState({
+  changeHeaderTab = async (id) => {
+    await this.setState({
       activeHeaderTab: id,
       activeSubTab: this.state.subHeaderTabs[id][0] ? this.state.subHeaderTabs[id][0].id : -1,
       articleList: [],
     });
+    sessionStorage.removeItem('homeState');
     this.fetchArticles();
   }
-  changeSubTab = (id) => {
-    this.setState({
+  changeSubTab = async (id) => {
+    await this.setState({
       activeSubTab: id,
       articleList: [],
     });
+    sessionStorage.removeItem('homeState');
     this.fetchArticles();
   }
-  changeBottomTab = (index) => {
-    this.setState({
+  changeBottomTab = async (index) => {
+    await this.setState({
       activeBottomTab: index,
       articleList: [],
     });
+    sessionStorage.removeItem('homeState');
     this.fetchArticles();
   }
   render() {

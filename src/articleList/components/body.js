@@ -22,6 +22,17 @@ export default class Body extends React.Component {
     );
     observer.observe(this.loading.current);
   }
+  addToHistory(articleInfo) {
+    // 除了暴力去重没想到什么好的办法，先不写去重了qwq
+    const history = localStorage.getItem('historyArticles');
+    if (history) {
+      const historyArticles = JSON.parse(history);
+      historyArticles.unshift(articleInfo);
+      localStorage.setItem('historyArticles', JSON.stringify(historyArticles));
+    } else {
+      localStorage.setItem('historyArticles', JSON.stringify([articleInfo]));
+    }
+  }
   render() {
     return (
       <div className={style['body']}>
@@ -32,7 +43,9 @@ export default class Body extends React.Component {
               to={ '/article/' + item.article_id }
               key={ index }
             >
-              <li><ArticleCard
+              <li
+                onClick={ () => { this.addToHistory(item) } }
+              ><ArticleCard
                 title={ item.article_info.title }
                 author={ item.author_user_info.user_name }
                 createTime={ item.article_info.ctime }

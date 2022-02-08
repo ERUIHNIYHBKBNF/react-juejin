@@ -4,6 +4,7 @@ import style from "./style.module.scss";
 import Body from "./components/body";
 import Comments from "./components/comments";
 export default function Article() {
+  window.scrollTo(0, 0);
   let { id } = useParams();
   return (
     <div className={ style['article-container'] }>
