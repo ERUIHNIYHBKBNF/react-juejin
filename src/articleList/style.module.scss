@@ -92,8 +92,8 @@
       flex-direction: column;
       li {
         // background-color: wheat;
-        height: 20vh;
-        border-bottom: 1vh solid #e9e9e9;
+        height: 8rem;
+        border-bottom: 0.2rem solid #e9e9e9;
         background-color: white;
         padding: 10px;
         span {
@@ -111,9 +111,9 @@
           line-clamp: 3;
           color: #444;
         }
-        &:last-child {
-          border-bottom: none;
-        }
+        // &:last-child {
+        //   border-bottom: none;
+        // }
       }
     }
     .loading {

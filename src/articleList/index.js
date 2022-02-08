@@ -114,13 +114,19 @@ export default class ArticleList extends React.Component {
   render() {
     return (
       <div className={ style['container'] }>
-        <Header
-          tabs={ this.state.headerTabs }
-          activeTab={ this.state.activeHeaderTab }
-          changeTab={ this.changeHeaderTab }
-        />
         {
-          this.state.subHeaderTabs[this.state.activeHeaderTab].length > 0 &&
+          this.state.activeBottomTab === 2 ||
+          <Header
+            tabs={ this.state.headerTabs }
+            activeTab={ this.state.activeHeaderTab }
+            changeTab={ this.changeHeaderTab }
+          />
+        }
+        {
+          (
+            this.state.subHeaderTabs[this.state.activeHeaderTab].length > 0 &&
+            this.state.activeBottomTab !== 2
+          ) &&
           <SubHeader
             tabs={ this.state.subHeaderTabs[this.state.activeHeaderTab] }
             activeTab={ this.state.activeSubTab }
