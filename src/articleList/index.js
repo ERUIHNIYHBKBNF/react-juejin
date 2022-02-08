@@ -20,6 +20,8 @@ export default class ArticleList extends React.Component {
       activeBottomTab: 0,
       // 要展示的文章列表
       articleList: [],
+      // 当前分类下总文章数
+      totalArticles: 0,
     };
   }
   componentDidMount() {
@@ -64,6 +66,7 @@ export default class ArticleList extends React.Component {
       let response = await getArticles(categoryId, sortBy, offset);
       this.setState({
         articleList: this.state.articleList.concat(response.data.articles),
+        totalArticles: response.total,
       });
     }
   }
@@ -111,7 +114,7 @@ export default class ArticleList extends React.Component {
         }
         <Body
           articles={ this.state.articleList }
-          // fetchArticles={ this.fetchArticles }
+          end= { this.state.articleList.length >= this.state.totalArticles }
           father={ this }
         />
         <Bottom

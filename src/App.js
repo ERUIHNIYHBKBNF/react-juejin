@@ -5,7 +5,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<ArticleList />} />
-      <Route path="/article" element={<Article />} />
+      <Route path="/article/:id" element={<Article />} />
     </Routes>
   );
 }

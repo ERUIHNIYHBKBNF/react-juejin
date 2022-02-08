@@ -41,7 +41,9 @@ export default class Body extends React.Component {
             </Link>
           ))}
         </ul>
-        <span ref={this.loading} className={style['loading']}>加载中...</span>
+        <span ref={this.loading} className={style['loading']}>
+          { this.props.end ? '没有更多了嘤~' : '加载中...' }
+        </span>
       </div>
     );
   }
