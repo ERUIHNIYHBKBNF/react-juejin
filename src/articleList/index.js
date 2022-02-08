@@ -92,7 +92,6 @@ export default class ArticleList extends React.Component {
       activeSubTab: this.state.subHeaderTabs[id][0] ? this.state.subHeaderTabs[id][0].id : -1,
       articleList: [],
     });
-    sessionStorage.removeItem('homeState');
     this.fetchArticles();
   }
   changeSubTab = async (id) => {
@@ -100,7 +99,6 @@ export default class ArticleList extends React.Component {
       activeSubTab: id,
       articleList: [],
     });
-    sessionStorage.removeItem('homeState');
     this.fetchArticles();
   }
   changeBottomTab = async (index) => {
@@ -108,19 +106,24 @@ export default class ArticleList extends React.Component {
       activeBottomTab: index,
       articleList: [],
     });
-    sessionStorage.removeItem('homeState');
     this.fetchArticles();
   }
   render() {
     return (
       <div className={ style['container'] }>
-        <Header
-          tabs={ this.state.headerTabs }
-          activeTab={ this.state.activeHeaderTab }
-          changeTab={ this.changeHeaderTab }
-        />
         {
-          this.state.subHeaderTabs[this.state.activeHeaderTab].length > 0 &&
+          this.state.activeBottomTab === 2 ||
+          <Header
+            tabs={ this.state.headerTabs }
+            activeTab={ this.state.activeHeaderTab }
+            changeTab={ this.changeHeaderTab }
+          />
+        }
+        {
+          (
+            this.state.subHeaderTabs[this.state.activeHeaderTab].length > 0 &&
+            this.state.activeBottomTab !== 2
+          ) &&
           <SubHeader
             tabs={ this.state.subHeaderTabs[this.state.activeHeaderTab] }
             activeTab={ this.state.activeSubTab }

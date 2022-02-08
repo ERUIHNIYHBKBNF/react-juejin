@@ -2,7 +2,7 @@
 
 有几次vue项目经历，尝试写个react小项目（~~比着跟官方教程写的tictactoe抄抄就行了~~），在此做点记录。
 
-来自[字学镜像计划](https://bytedancecampus1.feishu.cn/docs/doccn4ArhE7N3J3V2OszhGlZQkd#)，
+来自[字学镜像计划](https://bytedancecampus1.feishu.cn/docs/doccn4ArhE7N3J3V2OszhGlZQkd#)，最终代码存在github：[ERUIHNIYHBKBNF/react-juejin](https://github.com/ERUIHNIYHBKBNF/react-juejin)
 
 ## 初始化
 
@@ -114,5 +114,266 @@ export default class ArticleList extends React.Component {
 npm install -d node-sass
 ```
 
-### 组件关系
+于是大部分就这样子写了：
+
+```jsx
+import React from "react";
+import style from "../style.module.scss";
+export default class Bottom extends React.Component {
+  render() {
+    return (
+      <div className={ style['bottom'] }>
+        <ul>
+            <li>最新</li>
+            <li>热门</li>
+            <li>历史</li>
+        </ul>
+      </div>
+    );
+  }
+}
+```
+
+### 基础页面绘制
+
+写过一堆css之后变成了这个样子：<img src="https://cdn.jsdelivr.net/gh/ERUIHNIYHBKBNF/picapica@main/frontend/2022020801.webp" width="200px">
+
+<img src="https://cdn.jsdelivr.net/gh/ERUIHNIYHBKBNF/picapica@main/frontend/2022020802.webp" width="1000px">
+
+## 文章列表相关动态操作
+
+### 切换tabs
+
+这里所有tab的状态统一存到了公共的父组件 `/articleList/index.js` 里面，仍然以最底部的导航栏为例，父组件的state里存两个东西：
+
+`bottomTabs: ['热门', '最新', '历史'], activeBottomTab: 0,`
+
+分别表示都有哪些tabs和当前点击的tab是哪个，作为props传给底部导航栏组件处理即可，顺带父组件的changeTab事件也一并作为props传过去便于切换。
+
+index.js:
+
+```jsx
+<Bottom
+  tabs={ this.state.bottomTabs }
+  activeTab={ this.state.activeBottomTab }
+  changeTab={ this.changeBottomTab }
+/>
+```
+
+bottom.js:
+
+```jsx
+import React from "react";
+import style from "../style.module.scss";
+export default class Bottom extends React.Component {
+  render() {
+    return (
+      <div className={style['bottom']}>
+        <ul>
+          {this.props.tabs.map((item, index) => (
+            <li
+              onClick={ () => this.props.changeTab(index) }
+              // 为选中的组件动态绑定蓝色特效
+              className={ this.props.activeTab === index ? style['active-tab'] : '' }
+              key={ index }
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+```
+
+### 动态渲染文章预览
+
+其实跟tabs差不多，仍然是父组件 `/articleList/index.js` 去存储文章列表，把文章列表传给了 `body.js` 也就是页面主体部分，再由其分别传给每个小卡片。
+
+*感觉这样安排也许会有些不合理的地方，不过主要考虑是，接口获取文章列表也需要当前各种tabs的选中情况，而这些状态都存在了 `index.js` 里，所以为了对接口方便只好这样安排了qwq*
+
+### 对接fake-api动态获取数据
+
+因为是假的接口不需要网络请求，写起来就非常简单了，直接参考 `fake-api/index.js` 里的注释就好：
+
+/articleList/index.js：
+
+```jsx
+//...
+import { getCategories, getArticles } from "../fake-api";
+//...
+export default class ArticleList extends React.Component {
+  constructor(props) { /*......*/ }
+  componentDidMount() {
+    this.fetchCategories();
+    this.fetchArticles();
+  }
+  async fetchCategories() { /*......*/ }
+  async fetchArticles() { /*......*/ }
+  //...
+}
+```
+
+这样看上去就比较像样子了。
+
+<img src="https://cdn.jsdelivr.net/gh/ERUIHNIYHBKBNF/picapica@main/frontend/2022020803.webp" width="600px">
+
+关于无限下拉列表，跟上面提到的一样，这里父子组件关系安排有点乱，不如记录文章评论那里的无限下拉列表比较方便qwq
+
+## 文章内容相关动态操作
+
+### 路由跳转
+
+一种方式：
+
+```jsx
+// routes
+import { Routes, Route } from 'react-router-dom';
+<Routes>
+  <Route path="/" element={<ArticleList />} />
+  <Route path="/article/:id" element={<Article />} />
+</Routes>
+// link
+import { Link } from "react-router-dom";
+<Link
+  style={{ textDecoration:'none', color: '#000' }}
+  to={ '/article/' + item.article_id }
+>
+</Link>
+// 获取参数
+import { useParams } from "react-router-dom";
+const { id } = useParams();
+```
+
+### 组件功能划分
+
+文件结构长这样：<img src="https://cdn.jsdelivr.net/gh/ERUIHNIYHBKBNF/picapica@main/frontend/2022020804.webp" width="250px">
+
+其中 `index.js` 负责从路由获取文章id，分别传给文章主体部分 `body.js` 和评论部分 `comments.js` ，相关内容由这两个组件分别获取。
+
+文章接口可以直接获取html代码，~~无视xss~~使用 `<div dangerouslySetInnerHTML={{__html: this.state.article }}/>` 直接嵌入即可。
+
+### 评论区无限下拉实现
+
+实现思路主要是这些：
+
+* 设定好一个 `加载中` 元素始终位于最底部。
+* 使用 `IntersectionObserver` 监听这个 `加载中` 元素与视窗的重合部分。
+* 到达一定重合面积（也就是当用户能看到"加载中"这三个字）时，获取新的数据，`offset` 就是本地已获取的数据列表长度。
+* 接口提供总数据量 `total`，当本地已获取数据列表长度与之相等时，代表所有数据已经加载完毕。
+* 之后清除 `observer` 并将 `加载中` 替换为 `没有更多了`。
+
+~~也许整个组件的代码都可以丢这里占篇幅QwQ~~
+
+comments.js：
+
+```jsx
+import React from "react";
+import style from "../style.module.scss";
+import { getCommentsByArticleId } from "../../fake-api";
+export default class Comments extends React.Component {
+  constructor(props) {
+    super(props);
+    this.loading = React.createRef();
+    this.state = {
+      comments: [],
+      observer: null,
+      total: 0,
+    }
+  }
+  componentDidMount() {
+    // 创建observer，重合10%时开始获取新的数据。
+    const observer = new IntersectionObserver(
+      () => {
+        this.fetchComments();
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+    observer.observe(this.loading.current);
+    this.fetchComments();
+  }
+  // 获取新的数据
+  async fetchComments() {
+    const response = await getCommentsByArticleId(this.props.id, this.state.comments.length);
+    let comments = this.state.comments;
+    comments = comments.concat(response.data.comments);
+    this.setState({
+      comments,
+      total: response.total,
+    });
+  }
+  renderCommentCard(comment) {
+    /* 渲染一个评论卡片 */
+  }
+  render() {
+    return (
+      <div className={style['comments']}>
+        <ul>
+          { this.state.comments.map(this.renderCommentCard) }
+        </ul>
+          {/*这个span就是实现无限下拉的关键元素*/}
+          <span ref={this.loading} className={ style['loading'] }>
+            { this.state.total === this.state.comments.length ? '没有更多了嘤~' : '加载中...' }
+          </span>
+      </div>
+    );
+  }
+}
+```
+
+## 历史记录
+
+简单粗暴，在用户点击一篇文章时直接存localStorage即可：
+
+*这里除了暴力没有想到什么比较好的去重方法，所以~~直接懒得写~~没有写去重qwq*
+
+```jsx
+addToHistory(articleInfo) {
+  const history = localStorage.getItem('historyArticles');
+  if (history) {
+    const historyArticles = JSON.parse(history);
+    historyArticles.unshift(articleInfo);
+    localStorage.setItem('historyArticles', JSON.stringify(historyArticles));
+  } else {
+    localStorage.setItem('historyArticles', JSON.stringify([articleInfo]));
+  }
+}
+```
+
+在获取文章时，先检查当前选中的tab是否为 `历史` ，如果是，则文章列表直接在localStorage中获取：
+
+```jsx
+async fetchArticles() {
+  if (this.state.activeBottomTab === 2) {
+    this.fetchHistoryArticles();
+  } else {
+	/*......*/
+  }
+}
+fetchHistoryArticles() {
+  const history = localStorage.getItem('historyArticles');
+  // 是否有历史记录
+  if (history) {
+    const historyArticles = JSON.parse(history);
+    this.setState({
+      articleList: historyArticles,
+      totalArticles: historyArticles.length,
+    });
+  } else {
+    this.setState({
+      articleList: [],
+      totalArticles: 0,
+    });
+  }
+}
+```
+
+## 总结
+
+唔姆唔姆，不知道总结什么，但总该有个结尾qwq
+
+普普通通的一个项目叭，算是第一次体验了一下使用react进行开发~~（tictactoe不算）~~，用起来还挺舒服的。
 
