@@ -38,11 +38,11 @@ export default class Comments extends React.Component {
         key={ comment.comment_id }
       >
         <div className={ style['card-header'] }>
-          {/* <img
+          <img
             className={ style['avatar'] }
             src={ comment.user_info.avatar_large }
             alt=""
-          /> */}
+          />
           <span className={ style['username'] }> { comment.user_info.user_name } </span>
         </div>
         <p className={ style['content'] }>

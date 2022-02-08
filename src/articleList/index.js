@@ -22,24 +22,10 @@ export default class ArticleList extends React.Component {
       articleList: [],
       // 当前分类下总文章数
       totalArticles: 0,
-      // scrollTop: 0,
     };
-    // const lastState = sessionStorage.getItem('homeState');
-    // if (lastState) {
-    //   this.setState(JSON.parse(lastState));
-    //   // console.log(JSON.parse(lastState));
-    //   window.scrollTo(0, this.state.scrollTop);
-    // }
   }
   componentDidMount() {
     this.fetchCategories();
-  }
-  componentWillUnmount() {
-    // const state = this.state;
-    // state.scrollTop = window.scrollX;
-    // console.log();
-    // console.log(state);
-    // sessionStorage.setItem('homeState', JSON.stringify(state));
   }
   // 获取分类
   async fetchCategories() {
